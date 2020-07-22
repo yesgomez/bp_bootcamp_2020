@@ -94,5 +94,30 @@ def cross(vec_1, vec_2):
 
     return cross_product
 
- 
+def calc_torsion(vec_1, vec_2, vec_3, vec_4):
+    """
+    Using four sequential vectors in cartesian space, each representing
+    a position of an atom, the torsion between vec_2 and vec_3 is calculated.
 
+    :param vec_1: a subscriptable collection of length 3
+    :param vec_2: a subscriptable collection of length 3
+    :param vec_3: a subscriptable collection of length 3
+    :param vec_4: a subscriptable collection of length 3
+    :return tor: a scalar value of the torsion
+    
+
+    # Create vectors between the four atoms
+    line_1 = __(__(_, _))
+    line_2 = __(__(_, _))
+    line_3 = __(__(_, _))
+
+    # Normal vectors between two intersecting planes created by new vectors
+    plane_1 = __(_, _)
+    plane_2 = __(_, _)
+
+    # Calculate dihedral angle between two planes
+    x = __(_, _)
+    y = __(_, _)
+    di_angle = math.acos(_, _)
+    
+    return di_angle
