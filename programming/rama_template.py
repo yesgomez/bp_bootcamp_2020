@@ -104,7 +104,7 @@ def calc_torsion(vec_1, vec_2, vec_3, vec_4):
     :param vec_3: a subscriptable collection of length 3
     :param vec_4: a subscriptable collection of length 3
     :return tor: a scalar value of the torsion
-    
+    """
 
     # Create vectors between the four atoms
     line_1 = __(__(_, _))
@@ -121,3 +121,26 @@ def calc_torsion(vec_1, vec_2, vec_3, vec_4):
     di_angle = math.acos(_, _)
     
     return di_angle
+
+def read_pdb(filename):
+    """
+    From a given path to a pdb file, return a list of lines containing
+    atom data
+
+    :param filename: directory to pdb file
+    :return: suscriptable collection of atom data
+    """
+
+    # Read in file
+
+    # Read lines from file
+
+    # Close file (be kind rewind)
+
+    # Initiate suscriptable collection to store atom data
+
+    # Iterate over line data
+
+        # Split the lines 
+
+    # Return suscriptable collection
