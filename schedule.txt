@@ -1,0 +1,48 @@
+9/2 (with CCB)
+Terminal
+	How to navigate and organize directories
+	How to move, copy, and edit files
+	Be familiar with how one could use sed and awk
+	Know how to ssh into wynton or to a remote computer (every student should attend this lesson)
+Anaconda
+	Set up anaconda
+	Implement miniconda
+Github
+	Pull repository
+	Initiate repo
+	Make changes, push repo
+	Create repo, organize folders
+Tie all together
+	Create a repo with a miniconda
+	Add a file and edit file, upload
+	Realize a mistake, retrieve earlier version
+
+9/3
+Jupyter Notebook
+	Write work in markdown and LaTeX
+	Import modules
+Basic python usage:
+	Use string, int, float, decimal
+	Use list, dict, set, tuple
+	Use numpy arrays
+	List comprehension and string to list
+	Use matplotlib to make a graph
+	Use seaborn to make a good looking graph
+	Open a file
+Problem Solving
+	Open a file and create a graph from data in graph
+		-Advanced option, group of files, create a 2x2 graph from four files
+Pandas
+	Read in CSV files
+	Basic manipulation of dataframes
+	Using pandas and seaborn for making figures
+	Slicing data
+	Calculate new data
+	Write to new file
+Biopython
+	Seq data type
+	Reading/writing fasta files
+	Search BLAST in a Jupyter notebook
+9/4
+	Go over solution to Ramachandran solution
+	
