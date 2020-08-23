@@ -3,7 +3,7 @@
 # July 21st, 2020
 
 """
-As you start working on the ramachandran project, here is a helpful starting 
+As you start working on the ramachandran project, here is a helpful starting
 template with names and descriptions of functions that will be useful
 """
 
@@ -13,7 +13,7 @@ import re
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import requests
+# import requests
 
 def add(vec_1, vec_2):
     """
@@ -26,6 +26,7 @@ def add(vec_1, vec_2):
     """
 
     # add two vectors
+    vec_3 = [float(vec_1[0]) + float(vec_2[0]), float(vec_1[1]) + float(vec_2[1]), float(vec_1[2]) + float(vec_2[2])]
 
     return vec_3
 
@@ -39,7 +40,8 @@ def subtract(vec_1, vec_2):
     :return vec_3: a subscriptable collection of length 3
     """
 
-    # subtract two vectors 
+    # subtract two vectors
+    vec_3 = [float(vec_2[0]) - float(vec_1[0]), float(vec_2[1]) - float(vec_1[1]), float(vec_2[2]) - float(vec_1[2])]
 
     return vec_3
 
@@ -48,13 +50,14 @@ def normalize(vec):
     From a length-3 vector return a normalized vector
 
     :param vec: a subscriptable collection of length 3
-    :return norm_vec: a subscriptable collection 
+    :return norm_vec: a subscriptable collection
     """
 
     # Calculate the length of the vector
-    vec_len = 
+    vec_len = float(vec[0] + vec[1] + vec[2])
     # Divide the components of vec by the length of the vector
-    norm_vec = [_ / vec_len, _ / vec_len, _ / vec_len] 
+    norm_vec = [vec[0] / vec_len, vec[1] / vec_len, vec[2] / vec_len]
+
     return norm_vec
 
 def dot(vec_1, vec_2):
@@ -68,27 +71,27 @@ def dot(vec_1, vec_2):
     :param vec_2: a subscriptable collection of length 3
     :return dot_product: scalar value (float)
     """
-    
-    # Using cartesian coordinates, calculate the dot product
-    dot_product = vec_1[_] * vec_2[_] + vec_1[_] * vec_2[_] + vec_1[_] * vec_2[_]
 
-    retrun dot_product
+    # Using cartesian coordinates, calculate the dot product
+    dot_product = vec_1[0] * vec_2[0] + vec_1[1] * vec_2[1] + vec_1[2] * vec_2[2]
+
+    return dot_product
 
 def cross(vec_1, vec_2):
     """
     From two vectors calculate and return the cross product. This is
-    also known as the outer product and is a vector (that represents 
+    also known as the outer product and is a vector (that represents
     an orthogonal vector in 3-space).
 
     :param vec_1: a subscriptable collection of length 3
     :param vec_2: a subscriptable collection of length 3
     :return cross_product: a subscriptable collection of length 3
     """
-    
+
     # Calculate the components of the cross-product vector
-    cross_product_1 = vec_1[_] * vec_2[_] - vec_1[_] * vec_2[_]
-    cross_product_2 = vec_1[_] * vec_2[_] - vec_1[_] * vec_2[_]
-    cross_product_3 = vec_1[_] * vec_2[_] - vec_1[_] * vec_2[_]
+    cross_product_1 = vec_1[1] * vec_2[2] - vec_1[2] * vec_2[1]
+    cross_product_2 = vec_1[2] * vec_2[0] - vec_1[0] * vec_2[2]
+    cross_product_3 = vec_1[0] * vec_2[1] - vec_1[1] * vec_2[0]
 
     cross_product = [cross_product_1, cross_product_2, cross_product_3]
 
@@ -107,19 +110,19 @@ def calc_torsion(vec_1, vec_2, vec_3, vec_4):
     """
 
     # Create vectors between the four atoms
-    line_1 = __(__(_, _))
-    line_2 = __(__(_, _))
-    line_3 = __(__(_, _))
+    line_1 = subtract(vec_1, vec_2)
+    line_2 = subtract(vec_3, vec_2)
+    line_3 = subtract(vec_4, vec_3)
 
     # Normal vectors between two intersecting planes created by new vectors
-    plane_1 = __(_, _)
-    plane_2 = __(_, _)
+    plane_1 = normalize(cross(line_1, line_2))
+    plane_2 = normalize(cross(line_2, line_3))
 
     # Calculate dihedral angle between two planes
-    x = __(_, _)
-    y = __(_, _)
-    di_angle = math.acos(_, _)
-    
+    x = math.sqrt( math.pow(plane_1[0],2) + math.pow(plane_1[1],2) + math.pow(plane_1[2],2) )
+    y = math.sqrt( math.pow(plane_2[0],2) + math.pow(plane_2[1],2) + math.pow(plane_2[2],2) )
+    di_angle = math.acos(dot(plane_1, plane_2) / (x * y))
+
     return di_angle
 
 def read_pdb(filename):
@@ -132,15 +135,63 @@ def read_pdb(filename):
     """
 
     # Read in file
+    with open(filename,'r') as f:
 
-    # Read lines from file
+        # Read lines from file
+        flines = []
+        for lines in f:
+            flines.append(lines)
 
     # Close file (be kind rewind)
 
     # Initiate suscriptable collection to store atom data
+    atom_data = []
 
     # Iterate over line data
+    for line in flines:
 
-        # Split the lines 
+        # Split the lines
+        if "ATOM " in line:
+            atom_data.append(line.split())
 
-    # Return suscriptable collection
+    # print (len(atom_data), atom_data[-1])
+
+    # Return subscriptable collection
+    return atom_data
+
+
+## 1. Read in PDB file
+read_3emn = read_pdb("/home/yessica/VDAC_project/bin/pdbs/3emn.pdb")
+
+## 2. For every residue, extract the desired atoms with the corresponding Names
+res_ignore = ['PRO', 'GLY']
+vn_list = []
+va_list = []
+vc_list = []
+
+for dp in read_3emn:
+
+    if dp[3] not in res_ignore:
+
+        ## 3. For this subset of atoms, assign atom coordinates from columns 6-8 to vectors
+        if dp[2] == 'N':
+            vn_list.append([dp[6],dp[7],dp[8]])
+        elif dp[2] == 'CA':
+            va_list.append([dp[6],dp[7],dp[8]])
+        elif dp[2] == 'C':
+            vc_list.append([dp[6],dp[7],dp[8]])
+        else:
+            pass
+
+## 4. Using these atom vectors, calculate the phi angle, then the psi angle
+phi_angles = []
+psi_angles = []
+
+print (len(vn_list), len(va_list), len(vc_list))
+for j in range (len(vn_list)-1):
+    phi_angles.append(math.pi - calc_torsion(vc_list[j], vn_list[j], va_list[j+1], vc_list[j+1]))
+    psi_angles.append(math.pi - calc_torsion(vn_list[j+1], vc_list[j+1], va_list[j+1], vn_list[j]))
+
+print(len(phi_angles), len(psi_angles), phi_angles[-1], psi_angles[-1])
+
+## 5. Make a scatter plot of phi and  psi values
