@@ -111,8 +111,8 @@ def calc_torsion(vec_1, vec_2, vec_3, vec_4):
 
     # Create vectors between the four atoms
     line_1 = subtract(vec_1, vec_2)
-    line_2 = subtract(vec_3, vec_2)
-    line_3 = subtract(vec_4, vec_3)
+    line_2 = subtract(vec_2, vec_3)
+    line_3 = subtract(vec_3, vec_4)
 
     # Normal vectors between two intersecting planes created by new vectors
     plane_1 = normalize(cross(line_1, line_2))
@@ -122,6 +122,7 @@ def calc_torsion(vec_1, vec_2, vec_3, vec_4):
     x = math.sqrt( math.pow(plane_1[0],2) + math.pow(plane_1[1],2) + math.pow(plane_1[2],2) )
     y = math.sqrt( math.pow(plane_2[0],2) + math.pow(plane_2[1],2) + math.pow(plane_2[2],2) )
     di_angle = math.acos(dot(plane_1, plane_2) / (x * y))
+    print (di_angle)
 
     return di_angle
 
@@ -161,7 +162,7 @@ def read_pdb(filename):
 
 
 ## 1. Read in PDB file
-read_3emn = read_pdb("/home/yessica/VDAC_project/bin/pdbs/3emn.pdb")
+read_3emn = read_pdb("/home/yessica/VDAC_project/bin/pdbs/3emn_noalt.pdb")
 
 ## 2. For every residue, extract the desired atoms with the corresponding Names
 res_ignore = ['PRO', 'GLY']
@@ -169,29 +170,22 @@ vn_list = []
 va_list = []
 vc_list = []
 
-for dp in read_3emn:
-
+for i, dp in enumerate(read_3emn):
+    # (Ignore Gly or Pro)
     if dp[3] not in res_ignore:
-
         ## 3. For this subset of atoms, assign atom coordinates from columns 6-8 to vectors
         if dp[2] == 'N':
-            vn_list.append([dp[6],dp[7],dp[8]])
+            vn_list.append(dp)
+            # print(vn_list[-1])
         elif dp[2] == 'CA':
-            va_list.append([dp[6],dp[7],dp[8]])
+            va_list.append(dp)
+            # print(va_list[-1])
         elif dp[2] == 'C':
-            vc_list.append([dp[6],dp[7],dp[8]])
+            vc_list.append(dp)
+            # print(vc_list[-1])
         else:
-            pass
+            continue
 
 ## 4. Using these atom vectors, calculate the phi angle, then the psi angle
 phi_angles = []
 psi_angles = []
-
-print (len(vn_list), len(va_list), len(vc_list))
-for j in range (len(vn_list)-1):
-    phi_angles.append(math.pi - calc_torsion(vc_list[j], vn_list[j], va_list[j+1], vc_list[j+1]))
-    psi_angles.append(math.pi - calc_torsion(vn_list[j+1], vc_list[j+1], va_list[j+1], vn_list[j]))
-
-print(len(phi_angles), len(psi_angles), phi_angles[-1], psi_angles[-1])
-
-## 5. Make a scatter plot of phi and  psi values
